@@ -1,0 +1,1531 @@
+//05.12.2019
+---->installation and project set-up, for FreeRTOS 
+
+---->first, download mcuxpresso, as per the version 
+     suggested - it is known to work, for our 
+     projects/hw set-up 
+
+---->first, read the relevant sections of th e
+     "mcuxpresso installation manual", before starting your 
+     installation ???
+       --->get it from nxp's site 
+         --->particularly, ubuntu sections ?? 
+
+---->if you are facing any package issues, refer to 
+     mcuxpresso installation manual and Ubuntu sections
+
+---->you may need sudo privileges, for certain 
+     installation steps 
+
+---->once mcuxpresso IDE is installed, you can 
+     launch the IDE - 
+     use the provided project samples' PACKAGE - 
+     meaning, 
+     you can import these project samples/package 
+     into the IDE
+      --->it is a zip file - project package is 
+          part of today's RTOS files 
+      --->do not unzip/unpack  
+      --->just import it into the IDE
+          --->using import option, you need
+              to "import an existing project in Archive"
+
+     --->if you have imported the projects from the 
+         Archive file, you will see a set of 
+         projects on the left side panel 
+
+
+  
+
+---->in this project/samples, there are different 
+     basic sample projects 
+       ---->we need to build each of these project 
+            samples and test, along with NXP boards
+             --->you need to use one of the 
+                 NXP boards
+             --->you also need to use debugger hw, for 
+                 downloading and debugging - use 
+                 swd interface 
+       
+//06.12.2019
+//
+--->first, import the "first set of project samples", 
+    into the IDE
+
+--->next, refer to "assignment_01_readme_rtos.txt"
+    
+    --->understand the RTOS configuration settings and
+        modify the RTOS configuration settings, as required
+
+    ---->you need to use a different FreeRTOSConfig.h 
+         , for each project 
+          --->how do this ?? 
+
+    ---->make the required changes, in your 
+         FreeRTOSConfig.h and rebuild your 
+         application /image ?? 
+
+
+ --->there are several application projects 
+     and FreeRTOS project + one or more 
+     embedded library projects 
+
+     - in the context of RTOS platforms, we will be using 
+       different components/layered/modular components - 
+       ->we will be having  embedded libraries, like 
+         cmsis - it is a component/layered/modular - 
+         it will have several modules 
+       ->we will have RTOS libraries - these are components 
+         /layered/several modules
+       ->we may have application layer/modules 
+       ->there can be an embedded C library 
+       ->in all these cases, the application layer/project 
+         /component will be using other layers/components/
+         modules, as needed
+--->refer to projects/other components/modules/libraries, 
+    in your work-space
+    --->for instance, we may need a set of components/
+        their modules to be built/linked to generate 
+        a single downloadable image
+      
+       --->Example01_eq_prio(a) - an application component +
+       --->CMSISv2p00_LPC17xx(b) - a cmsis library 
+                                component       +
+           (we need to use this version, in this case
+            - do not use the older version)
+       --->FreeRTOS_Library(c) - this is an older verion 
+                              of FreeRTOS library +
+           (this version uses a CM3 HAL port layer)
+       --->Lib_MCU(d) - this is a micro-controller 
+           library for NXP 17xx chipsets
+           (we may use it, for certain application 
+            projects/modules)
+
+--->effectively, an image is created, using
+    a + b + c + d
+--->a,b,c and d have their own source trees 
+--->as per our requirements, we can set-up another
+    combination, by changing a or b or c or d or 
+    some specific combination  
+  
+ 
+   --->CMSISv1p30_LPC17xx(b) - a cmsis library 
+                                component       +
+       (we should not use this version, in this case
+        - do not use this older version)e
+       --->disable/close this project, in your 
+           work-space
+
+    ->for this application/project set-up, 
+      there will need, for specific header files, 
+      which will be present, in different components/
+      source trees - we need to provide appropriate 
+      directories of these include files, in 
+      project/IDE related settings  
+    ->in addition, there will be one or more libraries, 
+      which need to be linked(b or c or d or 
+      some combination) - we need to provide the 
+      names of the libraries and their binaries' locations, 
+      on project /IDE settings 
+    ->overall, these  details will enable the IDE to 
+      use the libraries/include files, in building 
+      the application sw image    
+
+--->for each assignment problem, we need to do the 
+    following :
+
+   ->if we are setting-up a new application project, do 
+     the following :
+--->start the following steps and complete in your
+    work-space 
+     ->create a duplicate copy of an existing application 
+       project, that is closer to our application's 
+       requirements/design 
+     ->rename, with the target application's name 
+     ->create an include folder, in the newly set-up 
+       project directory 
+     ->copy a sample/template FreeRTOSConfig.h into 
+       this include folder of the new project directory 
+     ->edit this FreeRTOSConfig.h, as per application's
+       requirements - refer to 
+          comments in FreeRTOSConfig.h and 
+          assignment_01_readme_rtos.txt 
+     ->keep repeating these, for every new application 
+       project/module
+     ->keep exporting and archiving your application 
+       projects, for future reference, at the end
+       of lab sessions 
+     >additional points :
+         ->we need a copy of a template FreeRTOSConfig.h, 
+           in every application project, under inc/ 
+           directory of each application project 
+         ->once copied, we can rename the FreeRTOSConfig.h, 
+           in FreeRTOS source tree 
+             --->rename it to Old_FreeRTOSConfig.h
+         ->in addition, we need to add this new path or 
+           other paths to 
+           include directories of application project's
+           IDE settings
+           --->you need to add include paths, for one or 
+               more embedded libraries + freertos library
+               + application related header files
+               --->we may face a missing FreeRTOSConfig.h
+               --->""""" FreeRTOS.h 
+               --->LPC17xx.h 
+               --->similar embedded headers files
+         --->in addition, for an application project, 
+             we also need to handle linkage of 
+             embedded and freertos libraries - 
+             we need to change some of the IDE 
+             settings ??
+             -->for instance, we need to add one or 
+                more library names, in the IDE settings
+                of the application project 
+             --->for instance, we need to add one or 
+                 more pathnames, for the added 
+                 library names 
+          --->based on all the above settings, if we 
+              clean our application project and 
+              rebuild, we may still face problems, like 
+              freertos library (its name will be displayed)
+              is not found /missing ??
+              -->check, if there is problem, in the 
+                 lib name/pathname
+              --->check, if the respective library is 
+                  building, without errors
+             
+            --->after the above changes/rectifications, 
+                are we able to rebuild successfully 
+  --->assuming we have successfully built the above
+      application project, what are the components 
+      built and linked to generate the final sw image ??
+      --->(a)freertos library(modules), in this case 
+      --->(b)cmsis lib. 2.0(modules), in this case
+      --->(c)application component/modules
+      --->(d)one or more embedded/language 
+             libraries configured, 
+             in the linker scripts - refer to 
+             example01_Debug_lib.ld
+  
+ 
+         ->in addition, we need to add this new path or 
+           other paths to 
+           include directories of "FreeRTOS library 
+           project/component"  IDE settings
+            --->if we clean this project and 
+                build this project, we must not face
+                any errors, including header file errors
+                --->one possible error is 
+                    missing FreeRTOSConfig.h 
+                --->missing FreeRTOS.h
+                --->missing LPC17xx.h    
+             --->rectify the above header paths and 
+                 rebuild "FreeRTOS library component", 
+                 first, before rebuilding your 
+                 application project, which uses 
+                 FreeRTOS library project     
+
+         ->first, clean and build the FreeRTOS project/ 
+           component - make sure, that there are no errors 
+           - we are using FreeRTOSConfig.h , in the modules
+             of FreeRTOS project/component 
+           - so, in the new case, FreeRTOSConfig.h will be 
+             provided, by application module/component, 
+             not FreeRTOS sources tree 
+         ->we need to edit the include paths of application 
+           project to include its own "new include path" 
+         ->now, clean application project 
+         ->now, rebuild the application project  
+               
+         ->the above set-up must be repeated, for each 
+           application project         
+    --->now, start from assignment_01_readme_rtos.txt
+         --->start with problem 1 ??
+
+    --->disable printf()s , in your code samples
+
+        --->refer to other techniques provided, 
+            in assignment_01_readme_rtos.txt
+
+        --->refer to 1_main.c /2_main.c/other c files, 
+            in ..../Code/*
+            --->do not copy these files/code 
+            --->just take the coding techniques   
+   
+ 
+
+
+- about the hw debugger, IDE, and target board/chip
+
+  ->check the hw debugger manual, for connections 
+    and especially, for connecting to external 
+    target - there are sections provided - there is 
+    no specific information on JTAG, but SWD is 
+    definitely supported 
+       -->check the jumper settings, before 
+          other details - this will be more, for 
+          disabling local MCU target and enabling 
+          the debugger to access external MCU target 
+
+  ->we cannot say that JTAG is not supported - it 
+    depends on the debugger firmware downloaded, 
+    the IDE and the target chip-set/board 
+
+  ->for the target chip-set/board, both SWD protocol
+    and JTAG protocol are supported - refer to 
+    lpc176x manual - chapter 33
+
+  ->refer to Complete guide for cortex M series - reference
+       -->there is a debug section 
+
+  ->if the firmware downloaded into the debugger's 
+    flash does not support SWD or JTAG, the IDE 
+    and chip-set/board will not ??
+
+
+  ->you need to find what is the current firmware downloaded
+    into the hw debugger ?? you can check, in the IDE , 
+    when the hw debugger is detected ???
+
+  ->based on the above, check the Vendor's support/
+    forum, for more details 
+
+  ->if SWD works properly, there should be no 
+    problem , otherwise, the firmware of the 
+    hw debugger may be an issue ???
+
+  ->in some cases, vendors explicity mention to 
+    enable JTAG, for special cases, like multi-processor
+    scenarios - otherwise SWD is faster and efficient 
+
+  ->refer to the board manual, for any specific 
+    issues mentioned ??? NGX board 
+
+  ->for specific design issues of RTOS, refer to 
+    lecture notes and Mastering RTOS or reference 
+    manual of RTos 
+
+  ->in the context of different RTOS versions/cores/
+    kernels and their configurations 
+      -->there will be differences, in the 
+         configurations 
+      -->there will be differences, in certain 
+         features /services - may not exist 
+      -->for the older version, refer to the 
+         sample 18/FreeRTOSConfig.h - comments 
+         are provided 
+      -->newer package will have a different set 
+         of configuration settings, but basic 
+         principles remain the same - check the 
+         lecture notes/Mastering/reference manual 
+      
+  ->do not use printf() or related statements :
+
+    ->these will use certain hw features, that 
+      are time consuming, for transmitting data
+    ->this will affect the performance of the 
+      current task - it can be, in the order of 
+      several milliseconds 
+    ->in addition, these features may have blocking 
+      operations/system API operations, 
+      which will affect the behaviour 
+      of tasks and scheduling, and not , as per 
+      our application's requirements  
+    
+  ->for instance, we are creating multiple tasks/TCBs, 
+    in the main, before invoking rtos initialization 
+    code/vTaskStartScheduler() 
+      -->refer to lecture notes
+      -->refer to samples, with comments 
+      -->if we create multiple equal/unequal priority 
+         tasks, before vTaskStartScheduler(), 
+         these tasks/TCBs will be added to appropriate 
+         Rqs - there is a multilevel set of Rqs - 
+         similar to Linux scheduler, there are 
+         multi-level Rqs
+--->visualize transfer of control to RTOS scheduler
+    and how tasks will be further scheduled - 
+    main() is not treated, as main task - it 
+    will be dead code, after RTOS initialization, 
+    as application tasks and system tasks(including 
+    task) will be scheduled/dispatched, as per 
+    their real-time scheduling priorities and 
+    other task management issues
+         ->after the vTaskStartScheduler(), rtos 
+           scheduler is activated /invoked - this 
+           will select the highest priority task 
+           and dispatch it 
+         ->further, based on the configuration settings, 
+           priorities of tasks, and other activities, 
+           in the system, the tasks will be scheduled 
+           /dispatched and executed 
+           -->different preemption points may be 
+              involved
+           -->blocking operations may be involved
+           -->yielding operations may be involved
+           -->like that sw timers may be involved 
+           -->IPCs may be involved 
+         --->if there is no ready task/TCB, 
+             in the Rq,idle task/TCB will be selected
+             and dispatched 
+         --->if any application task enters Rq, 
+             idle task will be immediately preempted     
+   
+      ->in the case of equal priority tasks, after 
+        the rtos initialization, we cannot predict 
+        the first task, which will be selected, by the 
+        scheduler
+   --->still, we can achieve FCFS, along with 
+       blocking or FCFS, along with yielding
+       --->as long as the application's jobs/
+           tasks are scheduled/dispatched/executed
+           , as expected, it is fine  
+         -->the above comments are based on lack 
+            of documentation and practical observations 
+        --->refer to 
+
+         -->but there are programming techniques, 
+            which can help us do this - there is 
+            a task offset technique, using sw 
+            timers - we will use a  code sample  
+            ->18_offset_period_main.c
+              ->vTaskDelayUntil() can be used 
+                to provide an absolute temporal 
+                offset to task, at the first release
+                time - this is will be during the 
+                initial part of the task method
+              ->in this context, vTaskDelayUntil() 
+                is just used to provide an absolute 
+                delay, at the beginning of the task 
+              ->we can add such absolue delays, with 
+                different parameters and ensure, that 
+                equal priority tasks are ordered,
+                sequenced, modelled, and scheduled, 
+                as needed
+              ->such techniques are known as task modelling 
+                techniques - these are used effectively 
+                ,along with other RTOS services,including 
+                scheduling       
+
+   -> configuration parameters, for preemption/scheduling, 
+      in older RTOS versions/cores
+
+      //lecture - configuration parameters that start
+      //with config define attributes of
+     //the kernel and in some cases, add code to the 
+     //kernel
+     //lecture - if CONFIG_USE_PREEMPTION option is set to 1, 
+     //preemption will be enabled in system tick
+     //handler and other places - system APIs, 
+     //and system ISRs 
+     //- what is the practical effect of enabling 
+     //preemption point, in systick ISR ?? need to be 
+     //answered ??? time-slicing/RR will be enabled 
+     //+ real-time prio is enabled 
+
+     //lecture - if this option is set to 0, 
+     //preemption will be disabled in system tick
+     //handler - will be still enabled,in other places 
+     //- system APIs and system ISRs - 
+     //what is the effect of disabling preemption point, 
+     //in systick ISR ?? time-slicing is disabled and 
+     //real-time prio scheduling is enabled  
+
+   ->for newer versions, refer to rtos.txt  
+
+  - in the context of RTOS platforms, we will be using 
+    different components/layered/modular components - 
+    ->we will be having a embedded libraries, like 
+      cmsis - it is a component/layered/modular - 
+      it will have several modules 
+    ->we will have RTOS libraries - these are components 
+      /layered/several modules
+    ->we may have application layer/modules 
+    ->there can be an embedded C library 
+    ->in all these cases, the application layer/project 
+      /component will be using other layers/components/
+      modules, as needed 
+    ->for this set-up, there will need, for header files, 
+      which will be present, in different components/
+      source trees - we need to provide appropriate 
+      directories of these include files 
+    ->in addition, there will be one or more libraries, 
+      which need to be linked - we need to provide the 
+      names of the libraries and their binaries' locations
+    ->overall, these  details will enable the IDE to 
+      use the libraries/include files, in building 
+      the application sw image     
+ 
+
+ - if there are errors, in application code or RTOS code(system APIs), 
+   we need to take certain strict actions, for debugging, testing, 
+   and production systems 
+
+   ->for instance, if there is error, in creating a task, we 
+     need to check the return value and take appropriate 
+     action - however, this is different, from a typical 
+     user-space code or kernel space module 
+        - refer to RTOS manuals
+        - refer to sample codes
+        - using configASSERT() macro - this is 
+          specific to a given RTOS platform 
+        - in this case, refer to FreeRTOSConfig.h 
+          ->#define configASSERT( x ) if( ( x ) == 0 ) 
+                    { taskDISABLE_INTERRUPTS(); for( ;; ); } 
+          ->effectively, this will be a system hang/crash
+          ->we can debug such scenarios 
+           
+          -> ret = xTaskCreate(parameters); 
+
+             configASSERT(ret == pdPASS);
+
+          ->we can use a debugger to check, where
+            the hand is, by using pause/halt feature -
+            this will list the program counter/code, 
+            where the current system is looping/
+            hanging 
+
+
+          ->also, similar assert points are added to 
+            various kernel execution paths - there 
+            are critical checks - if there is an 
+            illegal operation /result, this will 
+            hang the system
+
+    - if we are creating several tasks, with equal 
+      priority,they are expected to be scheduled/ 
+      dispatched, in the FCFS order, but on this 
+      platform, it may not work, as expected - 
+      so, we can use our initial offset approach, 
+      by adding appropriate time offsets to 
+      different tasks and this will ensure, that 
+      the actual iterations of tasks will be 
+      offset, by a certain value, in the time line 
+      of the system - indirectly, we are controlling 
+      the execution sequence of tasks of our jobs/ 
+      application   
+
+    - in an RTOS platform, we need to deal, with 
+      scheduler(s)/preemption point(s)/task/job 
+      scheduling scenarios - many such issues 
+      are common - however, the basic principles 
+      and designs are the same 
+      -> by setting/resetting certain kernel 
+         configuration parameters, we can 
+         enable/disable preemption points, in the 
+         systick handler 
+         ->this is based on preemption points, 
+           in system handlers/ISRs - this is 
+           true, for GPOS and RTOS, but in the 
+           case of RTOS, it can be tuned and 
+           manipulated, as per application's 
+           requirements 
+         ->refer to scheduling related notes, 
+           of GPOS
+         ->refer to RTOS lecture notes, as well 
+       ->let us assume, that we have enabled 
+         time slicing, by setting appropriate 
+         RTOS configuration parameters 
+       ->let us assume, that there are 2 tasks, 
+         with equal priority 
+         ->what will be their task scheduling, 
+           in the system ??
+           ->these are continuously running tasks 
+       ->let us assume, that we have disabled  
+         time slicing, by setting appropriate 
+         RTOS configuration parameters 
+       ->let us assume, that there are 2 tasks, 
+         with equal priority 
+         ->what will be their task scheduling, 
+           in the system ??
+           ->these are continuously running tasks??
+           -->only one of the tasks will be 
+              always scheduled, since the systick 
+              will not process any preemption, 
+              for time-slicing
+           -->the above is a specific case       
+ 
+    ->let us assume, that we have enabled 
+      preemption only,but disabled time-slicing, 
+      by setting appropriate 
+      RTOS configuration parameters 
+      ->let us assume, that there are 2 tasks, 
+         with unequal priorities
+      ->what will be their task scheduling, 
+        in the system ??
+        ->these are continuously running tasks, 
+          which may be sporadic or periodic
+          - in this, Taskj is periodic and 
+            implemented, using sw timer of 
+            Taskj 
+         ->let us assume Taski is executing and 
+           there is a systick hw timer int event 
+           - let us assume, that this event will 
+           be processed, by systick handler 
+         ->systick handler will process sw clock, 
+           expired sw timer(s), but not time-slice
+           processing
+           ->what happens, if Taskj is unblocked, 
+             if its sw timer expires ??
+              ->what happens,if Taskj is of 
+                higher importance, than Taski ?
+                 ->there will be a preemption, 
+                   in the systick handler and 
+                   pendsv will be triggered 
+                 ->as part of the pendsv, scheduler
+                   is processed, Taski is preempted
+                   and Taskj is scheduled/dispatched 
+              ->what happens, if Taskj is of 
+                lower importance, that Taski ? 
+                 ->the preemption point, in the 
+                   systick handler is ineffective, 
+                   but Taskj is unblocked and will 
+                   be scheduled/dispatched, in the 
+                   future 
+                 ->in this context, Taski will be 
+                   resumed, after systick Handler is 
+                   completed                
+ 
+    ->let us assume, that we have disabled 
+      preemption and  disabled time-slicing, 
+      by setting appropriate 
+      RTOS configuration parameters 
+      ->let us assume, that there are 2 tasks, 
+         with unequal priorities
+      ->what will be their task scheduling, 
+        in the system ??
+        ->these are continuously running tasks, 
+          which may be sporadic or periodic
+          - in this, Taskj is periodic and 
+            implemented, using sw timer of 
+            Taskj 
+         ->let us assume Taski is executing and 
+           there is a systick hw timer int event 
+           - let us assume, that this event will 
+           be processed, by systick handler 
+         ->systick handler will process sw clock, 
+           expired sw timer(s), but not time-slice
+           processing
+           ->what happens, if Taskj is unblocked, 
+             if its sw timer expires ??
+              ->what happens,if Taskj is of 
+                higher importance, than Taski ?
+                 ->there will be processing of 
+                   sw clock and sw timers, but no
+                   preemption, 
+                   in the systick handler and 
+                   pendsv will be not be triggered 
+              ->what happens, if Taskj is of 
+                lower importance, that Taski ? 
+                 ->the preemption point, in the 
+                   systick handler is ineffective, 
+                   but Taskj is unblocked and will 
+                   be scheduled/dispatched, in the 
+                   future 
+                 ->in this context, Taski will be 
+                   resumed, after systick Handler is 
+                   completed 
+
+        ->analyze, for other ISRs, like IO ISRs 
+          ->in these cases, application developer/
+            driver developer decide, preemption 
+            enabling/disabling, in the respective 
+            ISRs 
+ 
+   - as per typical RTOS rules, idle task will be 
+     created and assigned lowest scheduling priority, 
+     say 0 - idle task is created by the RTOS initialization 
+     code  
+     ->such an idle task must not block/no blocking 
+       operations are allowed 
+     ->we must not create another task, with idle task 
+       priority - this will lead to strange task modelling
+       and scheduling issues 
+     ->however, we can add our low-priority job to the 
+       idle task hook/call back and allow this call back/
+       job to do low-importance work 
+     ->however, we cannot include any blocking operations, 
+       in the idle task call back method/job 
+     ->otherwise, follow other designs  
+       
+
+    - refer to example5 of RTOS samples 
+      >we are using an external hw timer of the 
+       micro-controller, for generating a monotonically 
+       , increasing, high-resolution hw time base - 
+       - this hw timer will be used to provide a 
+         high-resolution, real-time base 
+      ->using this real-time base, we can capture the 
+        time-stamps of specific execution points, in 
+        our real-time tasks/jobs 
+      ->using time-stamps, we can check the real-time 
+        performance of the real-time tasks/jobs, in 
+        the system 
+
+     - refer to example5 of RTOS samples 
+       ->we are using systick->VAL , for reading 
+         the internal hw counter    
+       ->this internal counter is reloaded, for 
+         every systick exception event and counted 
+         down, until it reaches 0 - once it 
+         reaches 0, again systick exception is 
+         generated and it is reloaded, with the 
+         reload value programmed, in the systick 
+         timer hw - this trick is used, for our 
+         measurements and calculations  
+        ->based on the above, we can trace certain 
+          important execution points, in tasks/systick 
+          handlers and other kernel execution paths 
+        ->based on this, we can measure hw interrupt 
+          latencies, for RTOS-aware systick handlers
+        ->based on this, we can measure actual task
+          release time-stamps of periodic tasks
+        ->based on this, we can measure task scheduling 
+          latencies 
+        ->based on this, we can measure task scheduling 
+          latencies' jitter(s)
+
+        ->refer to example5's code and comments  
+        ->refer to lecture diagram  
+        ->connect the details of the above two ??
+
+        ->following are the details, for the lecture 
+          diagram, for a periodic task :
+          ->a periodic task, with period, p
+          ->vTaskDelayUntil() is used to block 
+            the current periodic task, at C and c
+            - the task/TCB is blocked, in the 
+              sw timer instance of the task/TCB, 
+              with appropriate absolute,future
+              time-stamp   
+          ->for such a periodic task and processing 
+            its sw timer, systick exception event an d
+            systick handler will do the processing 
+            ->as part of the processing, if the 
+              sw timer expires, the periodic task/
+              TCB will be unblocked and there is likely 
+              to be a preemption 
+            ->a) represents one or more periodic systick
+              events, that are processing our sw timer
+              instances
+            ->a') represents the execution of the first 
+                  instruction/code statement of the 
+                  systick handler 
+            ->we can measure interrupt latency, for 
+              systick handler, if we capture time-stamps
+              of a) and a') - refer to sample code and
+              comments
+            ->similarly, b) represents the first instruction/
+              code of the task's method, after its unblocked
+              , scheduled, and dispatched
+            ->based on this, if we capture time-stamps
+              of a) and b),  a) - b) will provide task 
+              scheduling latency 
+            ->in this context, a) is the expected, ideal 
+              task release time of the periodic task 
+            ->however, due to practical reasons and 
+              RTOS design, the actual release time is 
+              b) 
+            ->so, a)-b) provides the "task scheduling 
+              latency"
+            ->based on measuring several task scheduling 
+              latencies, we can find its jitter 
+               ->find the max. value of task scheduling 
+                 latencies - max(b)
+               ->find the min. value of task scheduling 
+                 latencies - min(b) 
+               ->max(b) - min(b) will provide task 
+                 scheduling latencies' jitter 
+
+            ->what is the use of the above real-time 
+              performance parameters and how they are
+              related  ??
+              ->interrupt latency decides response 
+                times of systick handler, which 
+                manages sw clock/sw timers/periodic
+                tasks/time-slicing - so, interrupt 
+                latency will affect the real-time 
+                performance of these services 
+              ->interrupt latency is part of task 
+                scheduling latency - in addition, 
+                task scheduling latency will affect 
+                the real-time performance/response of 
+                jobs of a real-time application 
+              ->so, the above parameters affect tasks
+                /jobs, their reponse times 
+              ->eventually, the real-time application 
+                is affected 
+                     
+    - in the case of a periodic task, where a 
+      vTaskDelayUntil() is used, after creating 
+      a sw timer and blocking the task, the sw timer
+      will be processed, after its future time-stamp 
+      expires and in addition, vTaskDelayUntil() is 
+      again invoked and the cycle is repeated - this 
+      is, what we see, in the case of C and c, where
+      C is the first invokation of vTaskDelayUntil() 
+      and task blocking and c is the subsequent 
+      invokation of vTaskDelayUntil(), in a loop 
+      of the job cycle - again, blocking of the 
+      task is done - whenever there is blocking of 
+      a task, scheduler is invoked and control is 
+      passed to the scheduler/RTOS - this is based 
+      on the basic principle of OS - just the 
+      context is different 
+
+ - task modelling :
+   ->based on your jobs and their characteristics, 
+     we need to divide the application into 
+     different jobs and accordingly, assign/model 
+     /implement tasks/task methods - like periodic 
+     or sporadic or ISR based or IPC linked, as 
+     per requirements - however, without the characteristics
+     of the jobs, it is not possible to model tasks 
+     and implement them 
+   ->refer to references, for certain examples/scenarios
+
+   ->in addition, you need to define certain parameters, 
+     for the jobs/tasks, as part of task modelling:
+
+     ->define a periodic or a sporadic job 
+     ->job needs to be defined, as well 
+     ->define the period of the job cycle 
+     ->as part of the job definition, we need to 
+       define WCET - WCET is purely the sum of 
+       execution times of all parts of a job - 
+       we need to find the max. value, based on 
+       thorough testing - once found, this value 
+       must be deterministic 
+     ->there will other delays, which may be 
+       needed, as part of the job - find the 
+       sum of the delays - this also may need
+       testing - must be deterministic 
+     ->there may be an temporal offset to the 
+       task modelling, if needed, for the 
+       job/application - we can use sw timers, 
+       for implementing, such scenarios
+     ->for periodic jobs/tasks, we need to 
+       use sw timer(s) 
+     ->in addition, as mentioned before, we need 
+       to consider issues, like IO, interruptions, 
+       and preemptions 
+     ->in addition, as mentioned before, we need to 
+       consider job/task response time requirements, 
+       interrupt latencies, task scheduling latencies, 
+       scheduling policy, priorities, and other such 
+       parameters 
+        
+    ->refer to references, for certain case studies ??
+        -->there is no fixed requirements, for 
+           response times
+        -->it depends on the applications/jobs 
+        -->we need to find all the parameters 
+           of the task modelling and in addition, 
+           thorough testing of the system
+           ->one of the key parameters is 
+             WCET of tasks/jobs
+
+     ->if you refer to assignments, there are 
+       scenarios, where temporal offsets are 
+       needed, for tasks/jobs 
+
+  - can we use internal hw timer/systick's 
+    internal down counter, for capturing 
+    real-time stamps and measuring latencies/
+    delays ???
+
+     ->in many scenarios, we need to use hw 
+       real-time-stamps to measure/calculate 
+       real-time performance parameters of 
+       system, as well as application - system 
+       services/APIs, as well as application
+       jobs/task methods
+
+    -->in the following scenario, we wish to 
+       measure and calculate the actual 
+       delay , due to vTaskDelay() ?? 
+       -->this will provide the actual, including 
+          any errors, due to accuracy or 
+          latenices ??? 
+      
+
+     ->if we understand the usage of systick, 
+       in a typical RTOS, we will find that its 
+       internal counter will be reloaded/refreshed
+       after every systick period, say 1msec of 10 msec
+       or 0.5 msec or 0.25msec (cannot be much lower, 
+       as it will generate too many systick interrupts
+       and the system  will be flooded, with systick 
+       hw interrupts)   
+     -> based on the above set-up, can we measure 
+        the delays/latencies of vTaskDelay(), say
+        vTaskDelay(50) or vTaskDelay(500) - 
+        here, the systick period's value is assumed 
+        to be 1 msec - we wish to measure/calculate 
+        the actual delay, using systick->VAL counter ??
+        is this technique okay ?? or, is there a fundamental 
+        flaw, in the technique ??
+        -->since systick->VAL is a running counter and 
+           reloaded every 1 msec, we will not have a
+           valid, running counter,for 50 msecs or other 
+           such delays - so, we cannot use this technique, 
+           in this context, as the VAL will be reset/reloaded
+           ,every 1 msec  - so, we do not have a long running 
+           downcounter 
+        
+
+        time_stamp1 = SysTick->VAL 
+         vTaskDelay(50);
+        time_stamp2 = SysTick->VAL 
+
+            
+	time_stamp1 = SysTick->VAL 
+	 { some embedded code }  -->very short code - it is ok 
+        time_stamp2 = SysTick->VAL
+        -->we can use systick->VAL, for measuring 
+           /calculating WCET of embedded code, which 
+           requires execution times, in the order of
+           usecs  
+
+      ->however, we can measure systick's 
+        interrupt latency, as described and coded, 
+        in Example5 of sample codes 
+         -->timestamp1 is hard-coded ??
+         -->timestamp2 is captured, in the 
+            port.c, in the first line of 
+            RTOS-aware systick handler  
+           
+         -->in the same context, check 
+            timestamp3 used to capture 
+            task release time, using 
+            SysTick->VAL just after 
+            vTaskDelayUntil() ???
+            ->you need to understand the 
+              working of vTaskDelayUntil()
+              and sw timers 
+           ->the line next to vTaskDelayUntil() 
+             is used measure/capture the actual 
+             release of a periodic task 
+           
+        ->do not use sw clock's time-stamps, 
+          for measuring real-time stamps, as 
+          the resolution is very low 
+      
+          ->xTaskGetTickCount() 
+
+            vTaskDelay(50); 
+  
+          ->xTaskGetTickCount()
+
+          ->the above measurement is wrong, as
+            the resolution is very low - we will 
+            always get the correct values, for 
+            delays and there will be no latencies, 
+            in our measurements/calculations, but 
+            this is due to very low resolution of 
+            sw clock, 1 msec or 0.5 msec
+          -->for many of the measurements and 
+             calculations, we will be needing 
+             a high resolution of 1usec or better    
+
+   -> for most of the real-time stamp requirements, 
+      configure and program an external hw timer(unused, 
+      by sw stack/RTOS), 
+      in the microcontroller :
+
+       ->program the hw timer, in a monotonic 
+         , upcounting mode/do not enable hw interrupts 
+       ->the resolution must be a min. of 1usec 
+       ->once done, we can capture the 
+         running time-stamps, at important points
+         of our application/tasks or system code 
+
+         -->read the hw timer counter - timestamp1
+            vTaskDelay(50); 
+         -->read the hw timer counter - timestamp2
+   
+         -->timestamp2 - timestamp1 gives the 
+            actual delay, including any latencies or 
+            errors 
+
+            vTaskDelayUntil(p1,p2);
+         -->read the hw timer counter - timestampi 
+
+         -->in the above case, when we keep capturing 
+            the timestamps again and again, we will 
+            be tracing the actual release times of 
+            tasks
+
+         -->in certain scenarios, we may use the 
+            external hw timer's time-stamps to 
+            capture the actual response time of 
+            task(s) ??
+             ->this will also give us the real-time 
+               performance of the system/application/
+               jobs    
+
+     - in the following cases, we are not getting 
+       accurate delays, when we use vTaskDelay()/
+       vTaskDelayUntil() ???
+         ->systick period is 1msec 
+         ->external hw timer's resolution is 1usec 
+        timestamp1 = read current time-stamp of 
+                     external hw timer 
+               vTaskDelay(2);//2 msecs  
+        timestamp2 = read current time-stamp of 
+                     external hw timer 
+      
+        in the above case, timestamp2 - timestamp1 
+        gives a value < 2 msecs      
+            say, 1850 microseconds 
+        -->in the above case, the actual delay is 
+           less, than expected delay - how do we 
+           handle, such a problem, in a real-world
+           application ???
+
+        -->in your set-up, you need to check the 
+           actual real-time performance  of 
+           vTaskDelay(), using above techniques ???
+
+    - based on all the above issues, we can add a 
+      new feature to our RTOS platform :
+   -->this is a different scenario, where we will 
+      be using an external hw timer to build 
+      a more accurate/high resolution sw timer, 
+      for our application's requirements - this 
+      sw timer will use a hw timer and certain 
+      OS services of RTOS - once the set-up is 
+      implemented and tested, we can use this 
+      , for our applications 
+      ->let us select and program an external 
+        hw timer(unused external hw timer)  
+      ->we will program this to generate a  
+        hw interrupt, after a certain delay, 
+        as a one-shot trigger /not a periodic 
+        triggering 
+      ->we can program the delay, with high
+        resolution - delay is application's choice  
+      ->for each delay requirement, we need to 
+        reprogram and enable the hw timer, which 
+        will generate a single interrupt event, 
+        after the delay is expired 
+      ->we need to develop/install an RTOS 
+        aware ISR, for this timer - we can 
+        write RTOS aware ISRs, for device drivers, 
+        as well as other services  
+      ->we need to support an interface, for 
+        setting-up the delay, for task/job/
+        application requirements - we need to 
+        provide a separate module, that exports
+        APIs - the module/methods/interfaces/
+        ISRs are all RTOS-aware - meaning, many 
+        of these services will be invoked, frm 
+        a task context   
+      ->whenever, a task/job requests a delay, 
+        using this interface of this sw timer 
+        module, following is 
+        done:
+         ->program the hw timer to generate the 
+           delay/interrupt event, as per the 
+           parameter passed to the interface
+         ->in addition, block the current task, 
+           using task notification or another 
+           technique 
+       ->the ISR needs to do the following:
+         ->once the delay expires, hw timer
+           generates a single hw interrupt event and 
+           ISR is processed 
+         ->this ISR will do any hw timer processing, 
+           if needed 
+         ->otherwise, just notify the blocked task, 
+           which is waiting, for the delay/time-out 
+         ->the hw int. priority of this IRQ of this 
+           external hw timer can be decided, as
+           per requirements 
+      ->what is this design/set-up ??
+         - these can be categorized under custom, 
+           high-resolution  sw timers 
+         - the original RTOS sw timers can be categorized
+           under low-resolution sw timers - atleast, in 
+           this platform  
+         - we can use appropriate sw timers, as per 
+           our application/jobs/tasks
+             -->for some tasks, we may use low-resolution 
+                sw timers
+             -->for some tasks, we may use high-resolution 
+                sw timers
+       -->this custom, sw timer set-up will be needed, 
+          as part of the assignments  
+
+  - refer to real-time mutex design and implementation, 
+    in Mastering FreeRTOS and reference manual :
+    ->in this context, mutex is a form of semaphore, 
+      mutex semaphore 
+    ->it supports task identification attribute - 
+      it means, if a task locks/acquires the 
+      mutex,the task identification, like 
+      task handle will be stored, in the 
+      mutex semaphore object 
+    ->in addition, it is an error handling mutex 
+      , by default - we do not have to set any 
+      specific attribute, for error handling,. in a
+      a mutex semaphore of an RTOS platform  
+    ->in addition, a mutex semaphore supports 
+      priority inheritance protocol attribute, 
+      by default - this may vary, from one RTOS 
+      platform to another RTOS platform  - in 
+      certain RTOS platforms, we can disable 
+      priority inheritance attribute, if it is 
+      not needed, for the application 
+    ->in the case of embedded applications, we can 
+      use mutex semaphore, for protecting 
+      shared-data critical sections, as well as 
+      shared-resource critical sections - we have 
+      seen the code samples - refer to the same  
+    ->however, using mutex semaphore(any lock/any resource) 
+      may lead to 
+      priority inversion problems, but solved by 
+      priority inheritance protocol implemented, 
+      in mutex semaphore operations - however, 
+      the responsibility of identifying priority 
+      inversion problems, in the designs/tasks/jobs
+      and applying priority inheritance attribute 
+      and further, testing and verification are left 
+      to the application developers  
+    ->first, let us understand basic priority inversion 
+      problem, also known as bounded priority 
+      inversion problem - priority inversion problems 
+      are common and mutex semaphore is discussed, 
+      in this context 
+    ->refer to mastering FreeRTOS  
+       - figure 65 , 66 and 67 
+
+       - as per Figure 65, a low-priority task 
+         and a high-priority task are sharing 
+         a resource and accessing, using an OS 
+         lock, a mutex lock - this is , for 
+         exclusive access to the resource, at 
+         a time    
+       - if low-priority task is holding the 
+         lock/resource and executing, high priority task 
+         can preempt
+         low-priority task and request, for lock/resource
+       - if the lock/resource is unavailable, the 
+         high priority task will be blocked and 
+         low-priority task will be resumed 
+       - low-priority task will resume, complete 
+         its job and unlock mutex/unblock the 
+         high-priority task 
+       - for this unlocking/unblocking operation,. 
+         a system API is used - this system API 
+         will also check, if the unblocked task 
+         is of higher importance and if so, 
+         trigger pendsv - scheduler will be invoked 
+       - high-priority task will preempt low-priority
+         task and resume execution - this time, it 
+         will acquire the lock/resource
+       - the above phenomenon and latencies are known, 
+         as basic /bounded 
+         priority inversion problem  
+       - in this scenario, there is an additional 
+         latency due to priority inversion problem
+       - such latencies are added to the task response
+          -->meaning, the high priority task is 
+             blocked, for a certain duration, as long 
+             as the shared resource is unavailable 
+      
+       - is this additional latency, acceptable ?
+           - acceptable, since it is part of our design 
+       - is this additional latency, bounded/
+         deterministic  ??        
+           - should be, since it is part our design
+             and we are responsible, for testing 
+             and verification 
+       - refer to figure 66 - another scenario, for
+         priority inversion problem - this scenario 
+         is even more serious ??? 
+       - in this case, while a higher priority task
+         is blocked, for a lock/resource, the lower 
+         priority task holding the lock/resource 
+         may be preempted, by intermediate priority 
+         tasks - these will further introduce more 
+         latencies
+            -->it can be one or more intermediate 
+               tasks  
+       - this form of priority inversion is known as
+         worst-case priority inversion problem or 
+         unbounded priority inversion problem, as 
+         the additional latencies may be unacceptable and/or 
+         non-deterministic    
+           --> we need to test and verify, for 
+               a given worst case scenario 
+
+       - based on all the above issues,RTOS core 
+         developers introduced priority inheritance 
+         protocol attribute to a mutex semaphore/
+         operations:
+          -->for this set-up, we are assuming, that 
+             priority inheritance attribute is 
+             enabled, in the mutex - so, the behaviour
+           of mutex operations is more effecient
+
+         - refer to Figure 67   
+
+         - if a lower-priority task is blocking a 
+           higher priority task, due to lock/resource, 
+           the scheduling priority of the lower-
+           priority task is raised to that of 
+           the blocked higher priority task, temporarily
+         - once the low-priority task releases the 
+           lock, its priority is restored to its 
+           original priority 
+         - due to this, unbounded priority inversion 
+           problem is solved, but basic priority 
+           inversion problem remains the same, which 
+           is acceptable 
+         - the above set-up /operations is known 
+           as priority inheritance protocol of 
+           a mutex lock - if a mutex has priority 
+           inheritance protocol enabled, the mutex 
+           operations will do the raising of priority
+           of a low-priority task and restoring its 
+           normal priority, as per the context   
+         - refer to figure 67, for the effect of 
+           priority inheritance protocol 
+         - based on the above, basic priority inversion 
+           or bounded priority inversion problems/
+           latencies will affect actual response 
+           times of higher-priority tasks - so, we 
+           need understand the design and its real-time 
+           performance issues - test and verify 
+     
+         - refer to another RTOS reference and its 
+           diagrams on priority inversion problems
+           and priority inheritance problems        
+
+  - refer to tasks.c, for the system objects and 
+    system data-structures used to manage tasks  
+    and sw timers
+  - specifically, you can check the TCB, which 
+    is a simple system object supporting fields, 
+    for thread mode stack and few other other 
+    parameters - it also supports segments, for 
+    MPU programming, if we are using an MPU 
+    port - in a non-MPU port some of these fields 
+    are unused 
+
+  - in addition, you will see a multi-level Rq(s), 
+    for supporting multiple priority levels
+ 
+
+ --->what are the factors , for testing ???
+
+     -->functional testing, for functional correctness ??
+         -->for a given job/task of the application, 
+            check that the job is done correctly, in 
+            the design/model, that is implemented ???
+
+
+     -->temporal correctness testing ??
+
+        -->if we are expecting certain periodic task or 
+           delays, check , if the periodicity or delay 
+           is done correctly 
+        --> we are interested, in response times of jobs
+            /tasks/applications 
+
+
+     -->temporal correctness, along with temporal determinism ??
+
+        -->in addition to the above, we need to test, for 
+           determinism, including issues, like latencies 
+           and their determinism 
+        -->eventually, we are interested, in response times
+           of the jobs/applications, but we need all the 
+           above, including determinism
+
+   -->for all the above testing, we need appropriate tools 
+      and techniques ??
+
+
+   -->let us understand the above testing aspects, using a 
+      simple scenario, in an RTOS application ???
+
+      -->refer to 1_main.c of the first sample project 
+
+      -->in this simple project, we are creating three tasks, 
+         with equal priority 
+      -->the task methods of these tasks use a crude delay loop, 
+         for this project - we will improvise these loops/
+         delays, in the next set of projects
+      -->we will change the configuration settings of schedulers/
+         preemptions and functionally test this simple 
+         application 
+      -->for different configuration settings, we will test 
+         and verify the functional correctness of the 
+         jobs/tasks 
+      -->based on the above, we may select appropriate 
+         configuration settings, that will work, for 
+         our application/jobs 
+      -->the jobs of these tasks do not use any blocking 
+         services of RTOS, so we may face starvation problems, 
+         for certain configuration settings - we may need to 
+         use yielding technique, using taskYIELD() RTOS service
+         - for all practical purposes, this RTOS service is , 
+           as good  as sched_yield() of Linux system  
+      -->for instance, you can test this simple project/sample/
+         application/jobs, using following configuration 
+         settings :
+
+           -->configUSE_PREEMPTION    1
+           -->configUSE_TIME_SLICING  1 
+
+      -->similarly, modify the settings and test and verify, 
+         for other combinations, as mentioned, in the 
+         assignments
+
+ ------>ret = xTaskCreate( vTask2, "Task 2", 240, NULL, 1, NULL );
+  
+   -->xTaskCreate() is the most common task creation systemAPI
+      used, for non-MPU model of RTOs 
+   -->p1 -> address of the task method
+   -->p2 -> task name string/used by RTOS-aware debuggers  
+   -->p3 -> thread mode stack size, in architecure words
+            -->for an architecture, with word-size of 4 bytes, 
+               240 means 240 * 4 bytes
+   -->p4 -> typically, ptr to an application object and 
+            passed to the task method, as the parameter - 
+            this must be a global data object and will 
+            contain hw details, for the job - mostly used, 
+            for implementing re-entrant task methods - 
+            initially, we can just pass NULL, if not 
+            needed
+   -->p5 -> real-time scheduling priority  - range can be 
+            0 --->  N-1 , where N is a configuration parameter, 
+            in FreeRTOSConfig.h   
+            --->refer to your project's FreeRTOSConfig.h
+#define configMAX_PRIORITIES ( ( unsigned portBASE_TYPE ) 5 
+      --->we can modify this parameter, as per our 
+          project's requirements 
+
+   -->p6 -> a pointer used to collect address of the TCB of the 
+            newly created task - this variable will be treated, 
+            as handle to the task and used, in certain services, 
+            like task notification services
+
+    -->if xTaskCreate() is successful, pdPASS will be returned, 
+       otherwise some error code - refer to the reference manual
+
+--->create as many real-time tasks, as needed 
+
+
+
+  -->Atollic's user-guide, for Linux - you will find most 
+     of the topics - it is like any other IDE
+      -->search for specific topics ????
+
+  -->importing the projects - zip projects into workspaces 
+       -->once imported, you can selectively duplicate 
+          projects - for instance, you can create a duplicate 
+          application project and/or a driver project 
+       -->you can close the old project and only use the 
+          new project 
+       -->create as many, in a workspace 
+       -->you can also use different workspaces, for different 
+          assignments
+      -->what you should not be doing ???
+         -->do not import two or more project archives into the same 
+            workspace  - each archive has a set of related projects
+       
+         -->each project archive must be imported into 
+            a different workspace ??
+
+            
+
+
+  -->building projects
+        
+         -->there will be different modules of different components
+         -->application modules + driver modules + rtos modules + 
+            cmsis modules + .........
+         -->when you build/rebuild, all these modules are built , 
+            as static modules and linked to create a final image 
+            -->in this case, we will see a  *.elf(for bare-metal) file 
+          -->this *.elf file will be used by the IDE to download the      
+             image - eventually, code and data segments of the *.elf 
+             file will be downloaded into the flash of the target 
+             chipset/board 
+         -->when we build, if we see errors, we need to fix and 
+            rebuild       
+
+
+  -->debugging projects
+
+        -->approx. 5 hw debug break points 
+      
+        -->watch windows, for variables/registers  
+
+        -->other run-time features of the debugger
+
+        -->refer to the user-guide  
+
+  -->use the IDE/debugger features 
+
+
+    
+        -->refer to user-guide 
+
+
+ -->lab queries - 11.06.2019
+
+    ->in the first text file/assignment/problems, 
+      assign equal priority to tasks and manage the 
+      configuration settings/scheduling/taskYIELD, 
+      appropriately
+
+    ->in the RTOS manuals, the documentation of 
+      taskYIELD may not be, as expected, but we need to 
+      map it to our requirements and scenarios 
+        -->refer to our OS lecture notes, for clarity
+           on yielding   
+
+    ->if you are enabling preemption and time-slicing, 
+      do not use taskYIELD - this is , as per the 
+      standard OS/scheduling rules - it does not 
+      make much sense to use preemption/time-slicing, 
+      while using yielding 
+
+   ->if you are using preemption and time-slicing, 
+     in this context, you may not get finer control 
+     of execution of jobs - so, actually, it is better
+     to use co-operative scheduling and taskYIELD, for 
+     such requirements/scenarios
+
+   ->if you are testing, with preemption/time-slicing 
+     disabled and yielding, you may still face certain 
+     problems, like order of execution of tasks/jobs 
+     -->refer to 18_offset_periodic_main.c, for 
+        enabling offsets to task methods/jobs, which 
+        can be used to reorder the tasks 
+
+   ->if we have a scenario, where two tasks of equal priority 
+     are accessing a shared resource and a mutex lock is used, 
+     for exclusive/protected access, at a time 
+       -->preemption/time-slicing are disabled 
+       -->is it possible to use taskYIELD, after a job cycle, 
+          in a task, so that the other task's job cycle is 
+          given opportunity 
+       -->to show case the above scenario, refer to 
+          13_Threads_Shared_LEDs_Mutex_unequal_Priority.zip
+        -->this is related to assignment text 4
+            -->refer to different scenarios  
+
+        -->we need to modify certain parameters /code, in 
+           this application project and test and verify  
+
+    -->irrespective of the above schedules/settings, we need 
+       to test and verfiy, that our jobs are functionally  
+       correct - next stage will be real-time performance
+       analysis ?? further will be reliability and other 
+       requirements ???
+  
+   -->in one of the scenarios, if equal priority tasks are 
+      created and managed, in assignment 1, there is no 
+      difference, if we use the settings of preemption 1 and 
+      time slicing 0 and preemption 0 and time slicing 0 ??
+       -->ideally, since we are using equal priority tasks, 
+          in our application and the jobs are also co-operative, 
+          using yielding, we can set the configuration settings to 
+          preemption 0 and time slicing 0
+       -->in most cases, set-up the system and test and verify, 
+          as per application/jobs/tasks 
+
+   -->refer to 2_main.c and 6_main.c, for scenarios/samples, 
+      for reentrant code/methods
+
+   -->refer to time base code sample - in this, we have 
+      a free running external hw timer, which provides 
+      a high-resolution, upcounting hw counter 
+   -->we can use this upcounter to capture time-stamps of 
+      execution points and calculate the actual delays/ 
+      latencies
+
+ -->assignment 1 and its problems are, for continuous tasks, 
+    which do not use blocking operations 
+      -->this is a form of jobs/tasks
+      -->here we can try co-operative scheduling, along 
+         with yielding  
+      -->use this form of tasks, as per application requirements
+
+ -->assignment2 and its problems are, for continuous tasks, 
+    but use blocking services, for time-management or 
+    other services
+       -->this is a form of jobs/tasks  
+       -->here we can try co-operative scheduling, along 
+          with blocking services 
+      -->use this form of tasks, as per application requirements
+
+  //rtos assignment 1 /last problem - to support non-blocking delay 
+  //operations 
+
+  ---> task_methodi(void *pvParam)
+       {
+
+         TickType_t  tickstowait = 50;//50 ticks 
+         TimeOut_t timeout; 
+
+         for(;;)
+         {
+              vTaskSetTimeOutState(&timeout);
+
+              while(1) {
+
+                if(xTaskCheckForTimeOut(&timeout, &tickstowait) == pdTRUE)
+                   break; 
+              }
+
+              //do the embedded job 
+      
+
+         }
+
+       }
+
+ 
+   //assignment 3 txt /switch-bouncing/debouncing problem 
+   //
+   //
+   //refer to eres1_realtime.pdf -->figure 33 /code fragment 16 
+   //
+   //switch bouncing/debouncing is a standard problem, in 
+   //the embedded - there is a good description, in this reference
+   //
+   //there is a good code sample to provide debouncing solution 
+   //
+   //analyze the diagram 
+
+   //analyze the diagram and the code 
+
+   //use the code and test it, for our case ??
+   //we can use it along with code samples, 
+         -->14_leds_switches_sem.c
+         -->15_leds_switches_queue.c
+
+   //understand the scenarios/code, design, implement , and test it
+   //when we implment the above designs/solutions, we will be 
+   //implementing a multi-state task ?? 
+
+
+ 
+
+
+
+
+ 
+
+     
+         
+ 
+
+ 
+     
